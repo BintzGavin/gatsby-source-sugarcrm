@@ -37,29 +37,28 @@ const refreshToken = async (endpoint, apiOptions, token) => {
       'Authorization': `Bearer ${token.access_token}`,
     }
   })
-  let data = await response.json()
-  if(data.access_token) {
-    writeToken({
-      access_token: data.access_token,
-      refresh_token: data.refresh_token
-    })
+  if (response.status === 400) {
+    console.log('\nRefresh Token is expired, refreshing authentication')
+    return await createToken(endpoint, apiOptions)
   }
-  return data.access_token
+  else {
+    let data = await response.json()
+    if(data.access_token) {
+      writeToken({
+        access_token: data.access_token,
+        refresh_token: data.refresh_token
+      })
+    }
+    return data.access_token
+  }
 }
 const checkAuth = async (endpoint, config, token) => {
-  console.log(token)
   if(token.hasOwnProperty('access_token')) {
-    console.log(`\nToken found, checking token\n${token.access_token}`)
     let result = await checkToken(endpoint, token.access_token)
       .catch(error => console.error(error))
     if(result.status === 401) {
       console.log(`\nAccess Token invalid, refreshing token\n`)
-      result = await refreshToken(endpoint, config, token)
-      console.log(result)
-      if (result.status === 400) {
-        console.log('\nRefresh Token is expired, refreshing authentication')
-        return await createToken(endpoint, config)
-      }
+      return await refreshToken(endpoint, config, token)
     } else if(result.status === 200) return token.access_token
   } else {
     console.log('\nToken is not present. Fetching a new one...')
