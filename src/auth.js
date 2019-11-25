@@ -1,4 +1,5 @@
 import { writeToken, readToken } from './utils.js'
+import 'regenerator-runtime/runtime';
 const fetch = require("node-fetch")
 
 const createToken = async (endpoint, apiOptions) => {

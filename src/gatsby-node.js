@@ -1,5 +1,6 @@
 import checkAuth from './auth.js'
 import { readToken } from './utils.js'
+import 'regenerator-runtime/runtime';
 
 const fetch = require("node-fetch")
 const queryString = require("query-string")
