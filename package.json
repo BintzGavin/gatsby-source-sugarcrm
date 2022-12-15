@@ -33,6 +33,6 @@
     "regenerator-runtime": "^0.13.3",
     "chokidar": "^1.7.0",
     "cross-env": "^5.0.5",
-    "danger": "^3.4.7"
+    "danger": "^11.2.0"
   }
 }
